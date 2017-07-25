@@ -42,7 +42,7 @@ import dev.project.app.com.fieldtripbuddies.Utils;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, IUserProfilePic, IAuthControl,IRegisterUser {
 
-    private LoggedInIntent loggedIn;
+    private LoggedInIntent loggedIn; //custom intent see details...
 private GoogleApiClient googleApiClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
