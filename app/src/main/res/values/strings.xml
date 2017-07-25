@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">FieldTripBuddies</string>
+    <string name="facebook_app_id">244666566032126</string>
+    <string name="fb_login_protocol_scheme">fb244666566032126</string>
+    <string name="facebook_login_text">Login using Facebook</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="menu_log_out">Log Out</string>
+    <string name="title_activity_background_check">BackgroundCheckActivity</string>
+    <string name="backgroundCheck">Apply to lead!</string>
+
+</resources>

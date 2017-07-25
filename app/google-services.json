@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "371587694632",
+    "project_id": "fieldtripbuddies"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:371587694632:android:6c913869a2a4315b",
+        "android_client_info": {
+          "package_name": "dev.project.app.com.fieldtripbuddies"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "371587694632-tgg90jjbl2eohkbi010pigkvnttl3f42.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "371587694632-9sqdhjcp2pce6qdv81afapbrqpl17a5n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.project.app.com.fieldtripbuddies",
+            "certificate_hash": "300172302b42e2800d5218436abf30eb22dd3bd5"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7udxEtWPCbW2050iXSyaxjxyeH8O1cfA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
