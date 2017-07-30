@@ -1,7 +1,12 @@
 package dev.project.app.com.fieldtripbuddies.Objects;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 
 import dev.project.app.com.fieldtripbuddies.Interfaces.IAPI_Candidate;
@@ -10,7 +15,13 @@ import dev.project.app.com.fieldtripbuddies.Interfaces.IAPI_Candidate;
  * Created by gabe on 7/19/2017.
  */
 
-public class API_Candidate implements IAPI_Candidate {
+/**
+ * This object is the model for creating 'candidate' for a background check to accurate background check API.
+ * See API https://developer.accuratebackground.com/?#/apidoc   ... for use
+ * after submission then the api server will send back an 'Order'
+ */
+
+public class API_Candidate implements IAPI_Candidate, Parcelable{
     private String ssn, dateOfBirth, email, firstName, lastName, phone;
     private String postalCode, regionCode, countryCode, city, address;
     private HashMap<String, String> values;
@@ -25,6 +36,32 @@ public class API_Candidate implements IAPI_Candidate {
     public API_Candidate() {
         values = new HashMap<>();
     }
+
+    protected API_Candidate(Parcel in) {
+        ssn = in.readString();
+        dateOfBirth = in.readString();
+        email = in.readString();
+        firstName = in.readString();
+        lastName = in.readString();
+        phone = in.readString();
+        postalCode = in.readString();
+        regionCode = in.readString();
+        countryCode = in.readString();
+        city = in.readString();
+        address = in.readString();
+    }
+
+    public static final Creator<API_Candidate> CREATOR = new Creator<API_Candidate>() {
+        @Override
+        public API_Candidate createFromParcel(Parcel in) {
+            return new API_Candidate(in);
+        }
+
+        @Override
+        public API_Candidate[] newArray(int size) {
+            return new API_Candidate[size];
+        }
+    };
 
     @Override
     public void setRegionCode(String reg) {
@@ -146,6 +183,25 @@ public class API_Candidate implements IAPI_Candidate {
         return this.values;
     }
 
+    @Override
+    public String POSTify() throws UnsupportedEncodingException {
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+        for (String key: this.values.keySet()) {
+            if (first) {
+                first = false;
+            }
+            else {
+                result.append("&");
+            }
+            //Log.e("OBJ.....","KEY: ["+key+"]"+"VAL: ["+value.toString()+"]");
+            result.append(URLEncoder.encode(key, "UTF-8"));
+            result.append("=");
+            result.append(URLEncoder.encode(this.values.get(key), "UTF-8"));
+        }
+        return result.toString();
+    }
+
     /**
      * Security error for jsonify..
      *
@@ -153,5 +209,25 @@ public class API_Candidate implements IAPI_Candidate {
      */
     public String toString() {
         return this.jsonify().toString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(ssn);
+        parcel.writeString(dateOfBirth);
+        parcel.writeString(email);
+        parcel.writeString(firstName);
+        parcel.writeString(lastName);
+        parcel.writeString(phone);
+        parcel.writeString(postalCode);
+        parcel.writeString(regionCode);
+        parcel.writeString(countryCode);
+        parcel.writeString(city);
+        parcel.writeString(address);
     }
 }

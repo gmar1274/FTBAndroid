@@ -2,6 +2,7 @@ package dev.project.app.com.fieldtripbuddies.Interfaces;
 
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 /**
@@ -35,4 +36,5 @@ public interface IAPI_Candidate {
     String getCity();
     JSONObject jsonify();
     HashMap<String,String> getValues();
+    String POSTify() throws UnsupportedEncodingException;
 }

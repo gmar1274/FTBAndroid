@@ -1,8 +1,10 @@
 package dev.project.app.com.fieldtripbuddies.AsyncTasks;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,6 +39,8 @@ import java.util.Iterator;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 
+import bolts.Task;
+import dev.project.app.com.fieldtripbuddies.Interfaces.IAPI_Call;
 import dev.project.app.com.fieldtripbuddies.Interfaces.IAPI_Candidate;
 import dev.project.app.com.fieldtripbuddies.Utils;
 
@@ -44,10 +48,17 @@ import dev.project.app.com.fieldtripbuddies.Utils;
  * Created by gabe on 7/19/2017.
  */
 
-public class API_POST_REQUEST extends AsyncTask<String, Void, String> {
+public class API_POST_Candidate extends AsyncTask<String, Void, String>  implements IAPI_Call {
     private final String USER_AGENT = "Mozilla/5.0";
     private HashMap<String, String> params;
     private IAPI_Candidate candidate;
+    private Activity act;
+
+    public API_POST_Candidate(Activity act, IAPI_Candidate cand) {
+        this.act = act;
+        this.candidate = cand;
+    }
+
     //#Example of  application/json posted in to /candidate to create a candidate
     /**
      * json = "{\n" +
@@ -126,10 +137,6 @@ public class API_POST_REQUEST extends AsyncTask<String, Void, String> {
         "        }\n" +
         "    ]\n" +
         "}\n";
-    public API_POST_REQUEST(IAPI_Candidate cand) {
-        this.candidate = cand;
-    }
-
     @Override
     protected String doInBackground(String... data_array) {
         // Create data variable for sent values to server
@@ -154,14 +161,15 @@ public class API_POST_REQUEST extends AsyncTask<String, Void, String> {
             conn.setRequestProperty("Content-Type",
                     "application/x-www-form-urlencoded");
                 JSONObject o = new JSONObject(example_json);
-                String data_post= getPostDataString(candidate.getValues());
-                Log.e("DATA POST: ",data_post);
+                String data_post= candidate.POSTify();
+
             conn.setRequestProperty("Content-Length", Integer.toString(data_post.getBytes().length));
             conn.setRequestProperty("Content-Language", "en-US");
             conn.connect();
 
             if (Utils.isDEBUG) {
-                Log.e("OBJECT PARAM:", data.toString());
+                Log.e("OBJECT PARAM json:", data.toString());
+                Log.e("DATA POST: ",data_post);
             } else {
                 //
             }
@@ -178,11 +186,12 @@ public class API_POST_REQUEST extends AsyncTask<String, Void, String> {
                 writer.close();
 
             int responseCode = conn.getResponseCode();
-            Log.e("RESPONCE CODE: ", responseCode + "");
+
             switch (responseCode) {
                 case HttpsURLConnection.HTTP_OK:
                     return readFromServer(conn);
                 default:
+                    Toast.makeText(this.act,"Network error :(",Toast.LENGTH_LONG).show();
                     return readFromServer(conn);
             }
         } catch (ProtocolException e) {
@@ -204,7 +213,7 @@ public class API_POST_REQUEST extends AsyncTask<String, Void, String> {
 
     }
 
-    private String readFromServer(HttpsURLConnection conn) throws IOException {
+    public String readFromServer(HttpsURLConnection conn) throws IOException {
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(
                         conn.getInputStream()));
@@ -218,7 +227,7 @@ public class API_POST_REQUEST extends AsyncTask<String, Void, String> {
         conn.disconnect();
         return sb.toString();
     }
-    private String readFromServer(HttpURLConnection conn) throws IOException {
+    public String readFromServer(HttpURLConnection conn) throws IOException {
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(
                         conn.getInputStream()));
@@ -233,10 +242,25 @@ public class API_POST_REQUEST extends AsyncTask<String, Void, String> {
         return sb.toString();
     }
     @Override
-    protected void onPostExecute(String result) {
-        Log.e("server: ", "Response: " + result);
-        // might want to change "executed" for the returned string passed
-        // into onPostExecute() but that is upto you
+    protected void onPostExecute(final String result) {
+        if(result==null){
+            Log.e("err server response","api server error"); //
+        }else{
+            if(Utils.isDEBUG) {
+                Log.e("server: ", "Response: " + result);
+            }else{
+
+            }
+            Task.BACKGROUND_EXECUTOR.execute(new Runnable() {
+                @Override
+                public void run() {
+                    API_POST_Order order = apiOrderCall(act, candidate ,result);
+                    order.execute();
+                    if(Utils.isDEBUG)Log.e("Finished in task", "status done..");
+                }
+            });
+        }
+
     }
 
     @Override
@@ -247,7 +271,8 @@ public class API_POST_REQUEST extends AsyncTask<String, Void, String> {
     protected void onProgressUpdate(Void... values) {
     }
 
-    private String getB64Auth(String login, String pass) {
+    @Override
+    public String getB64Auth(String login, String pass) {
         String source = login + ":" + pass;
         String ret = "Basic " + Base64.encodeToString(source.getBytes(), Base64.URL_SAFE | Base64.NO_WRAP);
         return ret;
@@ -272,21 +297,15 @@ public class API_POST_REQUEST extends AsyncTask<String, Void, String> {
         }
         return result.toString();
     }
-    public String getPostDataString(HashMap<String,String> params) throws Exception {
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
-        for (String key: params.keySet()) {
-            if (first) {
-                first = false;
-            }
-            else {
-                result.append("&");
-            }
-            //Log.e("OBJ.....","KEY: ["+key+"]"+"VAL: ["+value.toString()+"]");
-            result.append(URLEncoder.encode(key, "UTF-8"));
-            result.append("=");
-            result.append(URLEncoder.encode(params.get(key), "UTF-8"));
-        }
-        return result.toString();
+
+    @Override
+    public API_POST_Candidate apiCandidateCall(Activity act , String raw) {
+        return null;
+    }
+
+    @Override
+    public API_POST_Order apiOrderCall(Activity act,IAPI_Candidate cand ,String server_response) {
+       API_POST_Order order = new API_POST_Order(act,cand,server_response);
+        return order;
     }
 }
