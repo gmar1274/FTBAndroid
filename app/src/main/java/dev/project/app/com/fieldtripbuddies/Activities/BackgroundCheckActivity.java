@@ -6,11 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -22,7 +18,7 @@ import android.widget.Toast;
 
 import java.util.HashMap;
 
-import dev.project.app.com.fieldtripbuddies.AsyncTasks.API_POST_REQUEST;
+import dev.project.app.com.fieldtripbuddies.AsyncTasks.API_POST_Candidate;
 import dev.project.app.com.fieldtripbuddies.Intents.LoggedInIntent;
 import dev.project.app.com.fieldtripbuddies.Interfaces.IAPI_Candidate;
 import dev.project.app.com.fieldtripbuddies.Interfaces.IBackgroundCheck;
@@ -136,7 +132,7 @@ public class BackgroundCheckActivity extends AppCompatActivity implements IBackg
 
     @Override
     public AsyncTask<String, Void, String> apiCall(IAPI_Candidate candidate) {
-        return new API_POST_REQUEST(candidate);
+        return new API_POST_Candidate(this,candidate);
     }
 
     private void openCamera(Context c) {

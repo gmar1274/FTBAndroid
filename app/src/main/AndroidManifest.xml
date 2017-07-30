@@ -47,7 +47,12 @@
         <activity
             android:name=".Activities.BackgroundCheckActivity"
             android:label="@string/title_activity_background_check"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.ConfirmationActivity"
+            android:label="@string/title_activity_confirmation"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

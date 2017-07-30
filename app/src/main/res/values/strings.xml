@@ -11,5 +11,6 @@
     <string name="menu_log_out">Log Out</string>
     <string name="title_activity_background_check">BackgroundCheckActivity</string>
     <string name="backgroundCheck">Apply to lead!</string>
+    <string name="title_activity_confirmation">ConfirmationActivity</string>
 
 </resources>

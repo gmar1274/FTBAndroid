@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Created by gabe on 6/25/2017.
+ * This is all the authenticated information about any user that logs in to the app.
  */
 
 public interface ILoggedInUser {

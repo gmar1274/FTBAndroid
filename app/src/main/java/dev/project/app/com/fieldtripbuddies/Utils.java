@@ -46,6 +46,7 @@ public class Utils {
     public static final String USER_INFO_INTENT = "USER_PROFILE_INFO" ;// LoggedInIntent, same thing as intent except meant to used as a way for the app knows user after logged in
     public static final String API_KEY = "d076429f-09a5-4a73-8706-522e091bb630";
     public static final String API_SECRET_KEY = "ef83f919-9c9c-44d3-86e6-f7d296fa891d";
+    public static final String ACCURATE_BACKGROUND_ORDER = "https://api.accuratebackground.com/v3/order";//create a candidate
     ;
 
     /**
